@@ -24,6 +24,7 @@
   import javax.crypto.spec.SecretKeySpec;
   import java.io.*;
   import java.nio.charset.StandardCharsets;
+  import java.nio.file.FileSystems;
   import java.security.InvalidKeyException;
   import java.security.NoSuchAlgorithmException;
   import java.security.SecureRandom;
@@ -32,10 +33,10 @@
   import java.util.Base64;
   import java.util.Formatter;
 
-  public class HmacSha1Signature {
+  public class HmacSha256 {
       private static final String KEY_ALGORITHM = "AES"; // AES, ARCFOUR, BLOWFISH, DES, DESEDE, HMACMD5, HMACSHA1, HMACSHA224, HMACSHA256, HMACSHA384, HMACSHA512, RC2
       private static final String HMAC_SHA256_ALGORITHM = "HMACSHA256"; // HMACMD5, HMACSHA1, HMACSHA224, HMACSHA256, HMACSHA384, HMACSHA512
-      private static final String FILE_PATH = "/Users/Poppingary/Documents/HiTRUST_workspace/HMAC-SHA1 Signatures/Key/key.txt";
+      private static final String FILE_PATH = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + "/Key/key.txt"; // "/Users/Poppingary/Documents/HiTRUST_workspace/HMAC-SHA256/Key/key.txt";
 
       // Step 1: generating the key
       // approach 1: key generator
@@ -71,13 +72,18 @@
       // saving the key into a file
       private static void saveKeyIntoFile(byte[] key) throws IOException {
           File file = new File(FILE_PATH);
+          if (!file.exists()) {
+              if (file.getParentFile().mkdirs()) {
+                  System.out.println("Key's directory is created!");
+              } else {
+                  System.out.println("Key's directory cannot be created!");
+              }
+
+          }
+
           FileOutputStream fileOutputStream = new FileOutputStream(file);
           OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
           BufferedWriter bufferedWriter = null;
-
-          if (!file.exists()) {
-              file.createNewFile();
-          }
 
           try {
               bufferedWriter = new BufferedWriter(outputStreamWriter);
@@ -153,7 +159,7 @@
       }
 
       public static void main(String[] args) throws Exception {
-          byte[] key = generateKeyByPassword();
+          byte[] key = generateKeyByKeyGenerator();
           System.out.print("Key: ");
           for (Byte num : key) {
               System.out.print(num);
