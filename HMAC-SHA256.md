@@ -21,7 +21,8 @@
   import javax.crypto.SecretKeyFactory;
   import javax.crypto.spec.PBEKeySpec;
   import javax.crypto.spec.SecretKeySpec;
-  import java.io.UnsupportedEncodingException;
+  import java.io.*;
+  import java.nio.charset.StandardCharsets;
   import java.security.InvalidKeyException;
   import java.security.NoSuchAlgorithmException;
   import java.security.SecureRandom;
@@ -31,12 +32,13 @@
   import java.util.Formatter;
 
   public class HmacSha1Signature {
-      private static final String KEY_ALGORITHM = "DES"; // AES, ARCFOUR, BLOWFISH, DES, DESEDE, HMACMD5, HMACSHA1, HMACSHA224, HMACSHA256, HMACSHA384, HMACSHA512, RC2
+      private static final String KEY_ALGORITHM = "AES"; // AES, ARCFOUR, BLOWFISH, DES, DESEDE, HMACMD5, HMACSHA1, HMACSHA224, HMACSHA256, HMACSHA384, HMACSHA512, RC2
       private static final String HMAC_SHA256_ALGORITHM = "HMACSHA256"; // HMACMD5, HMACSHA1, HMACSHA224, HMACSHA256, HMACSHA384, HMACSHA512
+      private static final String FILE_PATH = "/Users/Poppingary/Documents/HiTRUST_workspace/HMAC-SHA1 Signatures/Key/key.txt";
 
-      // Step 1: generating a key
+      // Step 1: generating the key
       // approach 1: key generator
-      private static byte[] generateKey() throws NoSuchAlgorithmException {
+      private static byte[] generateKeyByKeyGenerator() throws NoSuchAlgorithmException {
           KeyGenerator kgen = KeyGenerator.getInstance(KEY_ALGORITHM);
           SecretKey key = kgen.generateKey();
 
@@ -65,13 +67,73 @@
           return key.getEncoded();
       }
 
+      // saving the key into a file
+      private static void saveKeyIntoFile(byte[] key) throws IOException {
+          File file = new File(FILE_PATH);
+          FileOutputStream fileOutputStream = new FileOutputStream(file);
+          OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+          BufferedWriter bufferedWriter = null;
+
+          if (!file.exists()) {
+              file.createNewFile();
+          }
+
+          try {
+              bufferedWriter = new BufferedWriter(outputStreamWriter);
+
+              StringBuilder keyString = new StringBuilder();
+
+              for (Byte num : key) {
+                  keyString.append(num);
+              }
+
+              bufferedWriter.write(keyString.toString());
+          } catch (IOException e) {
+              e.printStackTrace();
+          } finally {
+              if (bufferedWriter != null) {
+                  bufferedWriter.close();
+              }
+          }
+      }
+
+      // getting the key from a file
+      private static byte[] getKeyFromFile() throws IOException {
+          StringBuilder keyString = new StringBuilder();
+          File file = new File(FILE_PATH);
+          FileInputStream fileOutputStream = new FileInputStream(file);
+          InputStreamReader inputStreamReader = new InputStreamReader(fileOutputStream, StandardCharsets.UTF_8);
+          BufferedReader bufferedReader = null;
+
+          try {
+              bufferedReader = new BufferedReader(inputStreamReader);
+
+              String contentLine = bufferedReader.readLine();
+              while (contentLine != null) {
+                  keyString.append(contentLine);
+                  contentLine = bufferedReader.readLine();
+              }
+          } catch (FileNotFoundException e) {
+              e.printStackTrace();
+          } catch (IOException e) {
+              e.printStackTrace();
+          } finally {
+              if (bufferedReader != null) {
+                  bufferedReader.close();
+              }
+          }
+
+          System.out.println("Get the key from the file: " + keyString.toString());
+          return keyString.toString().getBytes(StandardCharsets.UTF_8);
+      }
+
       // generating the Message Authentication Code (MAC)
       private static byte[] generateMac(String message, byte[] key) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
           SecretKeySpec signingKey = new SecretKeySpec(key, HMAC_SHA256_ALGORITHM);
           Mac mac = Mac.getInstance(HMAC_SHA256_ALGORITHM);
           mac.init(signingKey);
 
-          return mac.doFinal(message.getBytes("UTF-8"));
+          return mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
       }
 
       private static String toHexString(byte[] bytes) {
@@ -91,15 +153,16 @@
 
       public static void main(String[] args) throws Exception {
           byte[] key = generateKeyByPassword();
-          String message = "Hello World!";
-          String hmac = toHexString(generateMac(message, key));
-
           System.out.print("Key: ");
           for (Byte num : key) {
               System.out.print(num);
           }
-
           System.out.println();
+
+          saveKeyIntoFile(key);
+          byte[] keyFromTheFile = getKeyFromFile();
+          String message = "Hello World!";
+          String hmac = toHexString(generateMac(message, keyFromTheFile));
 
           System.out.print("Message + MAC: ");
           System.out.print(combineMessageAndMac(message, hmac));
