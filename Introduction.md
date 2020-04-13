@@ -2,7 +2,7 @@
 
   - 保密性 (Confidentiality)
   
-  ensuring that information is accessible only to those authorized to have access
+       ensuring that information is accessible only to those authorized to have access
   
   - 資料完整性 (Integrity)
   
