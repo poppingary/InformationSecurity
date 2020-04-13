@@ -6,23 +6,23 @@
   
   - 資料完整性 (Integrity)
   
-  guarding the accuracy and completeness of information and processing methods
+       guarding the accuracy and completeness of information and processing methods
   
   - 可用性 (Availability)
   
-  ensuring that authorized users have access to information and associated assets when required
+       ensuring that authorized users have access to information and associated assets when required
 
   - 權限控管 (Access Control)
   
-  Managing who has access to what information and/or processes
+       Managing who has access to what information and/or processes
 
   - 稽核 (Accountability)
   
-  Monitor and manage who has performed what actions, on which systems and when.
+       Monitor and manage who has performed what actions, on which systems and when.
 
   - 不可否認性 (Non-Repudiation)
   
-  Neither sender nor recipient can deny they sent or received a message.
+       Neither sender nor recipient can deny they sent or received a message.
 
 ## 密碼學系統
 
