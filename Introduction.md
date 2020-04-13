@@ -1,7 +1,6 @@
 ## 資訊安全
 
   - 保密性 (Confidentiality)
-    
     ensuring that information is accessible only to those authorized to have access
   
   - 資料完整性 (Integrity)
@@ -29,7 +28,5 @@
   - 對稱式金鑰或秘密金鑰 (Symmetric Key or Secret Key)
     - pros: 加解密速度快
     - cons: 如何使通訊各方獲得金鑰
-    - 演算法
-      - DES (Data Encryption Standard)
-      - AES (Advance Encryption Standards)
+    - 演算法: DES (Data Encryption Standard), AES (Advanced Encryption Standards)
   - 非對稱式金鑰或公開金鑰 (Asymmetric Key or Public Key)
