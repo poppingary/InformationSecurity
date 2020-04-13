@@ -20,7 +20,7 @@
   
   Monitor and manage who has performed what actions, on which systems and when.
 
-  - 不可否認 (Non-Repudiation)
+  - 不可否認性 (Non-Repudiation)
   
   Neither sender nor recipient can deny they sent or received a message.
 
@@ -32,3 +32,6 @@
     - 演算法: DES (Data Encryption Standard), AES (Advanced Encryption Standards)
     
   - 非對稱式金鑰或公開金鑰 (Asymmetric Key or Public Key)
+    - pros: 解決對稱式金鑰獲得金鑰的問題、引進數位簽章 (識別發送端、資料完整性、不可否認性)
+    - cons: 加解密速度慢
+    - 演算法: RSA
