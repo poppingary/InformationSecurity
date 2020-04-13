@@ -34,4 +34,4 @@
   - 非對稱式金鑰或公開金鑰 (Asymmetric Key or Public Key)
     - pros: 解決對稱式金鑰獲得金鑰的問題、引進數位簽章 (識別發送端、資料完整性、不可否認性)
     - cons: 加解密速度慢
-    - 演算法: RSA
+    - 演算法: RSA, Diffie-Hellman
